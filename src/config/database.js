@@ -1,6 +1,10 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
-module.exports = mongoose.connect(process.env.CONNECTION_STRING);
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
+const options = {
+    useNewUrlParser: true,
+    connectTimeoutMS: 10000,
+};
 
 mongoose.Error.messages.general.required = "O atributo '{PATH}' é obrigatório."
 mongoose.Error.messages.Number.min =
@@ -9,3 +13,13 @@ mongoose.Error.messages.Number.max =
     "O '{VALUE}' informado é maior que o limite máximo de '{MAX}'."
 mongoose.Error.messages.String.enum =
     "'{VALUE}' não é válido para o atributo '{PATH}'."
+
+
+mongoose
+    .connect(process.env.CONNECTION_STRING, options)
+    .then(function () {
+        console.log("MongoDB is connected");
+    })
+    .catch(function (err) {
+        console.error(err);
+    });
